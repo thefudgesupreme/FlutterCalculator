@@ -12,6 +12,7 @@ class CalculatorView extends StatefulWidget {
 class _CalculatorViewState extends State<CalculatorView> {
   int num1 = 0, num2 = 0;
   num ans = 0;
+  String error = '';
 
   final displayOneController = TextEditingController();
   final displayTwoController = TextEditingController();
@@ -23,6 +24,13 @@ class _CalculatorViewState extends State<CalculatorView> {
     super.initState();
     displayOneController.text = num1.toString();
     displayTwoController.text = num2.toString();
+
+    if (displayOneController.text == '0') {
+      displayOneController.text = '';
+    }
+    if (displayTwoController.text == '0') {
+      displayTwoController.text = '';
+    }
 
     _listener = AppLifecycleListener(
       onShow: _onShow,
@@ -92,6 +100,14 @@ class _CalculatorViewState extends State<CalculatorView> {
                 fontSize: 75,
                 fontWeight: FontWeight.bold),
           ),
+          Text(
+            error,
+            style: const TextStyle(
+                fontFamily: 'IndieFlower',
+                color: Colors.redAccent,
+                fontSize: 30,
+                fontWeight: FontWeight.bold),
+          ),
 
           const Spacer(),
 
@@ -101,32 +117,60 @@ class _CalculatorViewState extends State<CalculatorView> {
               FloatingActionButton(
                   onPressed: () {
                     setState(() {
-                      ans = num.tryParse(displayOneController.text)! +
-                          num.tryParse(displayTwoController.text)!;
+                      error = "";
+                      if (displayOneController.text != "" &&
+                          displayTwoController.text != "") {
+                        ans = num.tryParse(displayOneController.text)! +
+                            num.tryParse(displayTwoController.text)!;
+                      } else {
+                        error = 'Need both numbers to calculate answer';
+                      }
                     });
                   },
                   child: const Icon(CupertinoIcons.add)),
               FloatingActionButton(
                   onPressed: () {
                     setState(() {
-                      ans = num.tryParse(displayOneController.text)! -
-                          num.tryParse(displayTwoController.text)!;
+                      error = "";
+                      if (displayOneController.text != "" &&
+                          displayTwoController.text != "") {
+                        ans = num.tryParse(displayOneController.text)! -
+                            num.tryParse(displayTwoController.text)!;
+                      } else {
+                        error = 'Need both numbers to calculate answer';
+                      }
                     });
                   },
                   child: const Icon(CupertinoIcons.minus)),
               FloatingActionButton(
                   onPressed: () {
                     setState(() {
-                      ans = num.tryParse(displayOneController.text)! *
-                          num.tryParse(displayTwoController.text)!;
+                      error = "";
+                      if (displayOneController.text != "" &&
+                          displayTwoController.text != "") {
+                        ans = num.tryParse(displayOneController.text)! *
+                            num.tryParse(displayTwoController.text)!;
+                      } else {
+                        error = 'Need both numbers to calculate answer';
+                      }
                     });
                   },
                   child: const Icon(CupertinoIcons.multiply)),
               FloatingActionButton(
                   onPressed: () {
                     setState(() {
-                      ans = num.tryParse(displayOneController.text)! /
-                          num.tryParse(displayTwoController.text)!;
+                      error = "";
+                      if (displayOneController.text != "" &&
+                          displayTwoController.text != "") {
+                        if (num.tryParse(displayTwoController.text)! != 0) {
+                          ans = num.tryParse(displayOneController.text)! /
+                              num.tryParse(displayTwoController.text)!;
+                        } else {
+                          error = 'Cannot Divide by Zero';
+                        }
+                      } else {
+                        error = 'Need both numbers to calculate answer';
+                      }
                     });
                   },
                   child: const Icon(CupertinoIcons.divide)),
